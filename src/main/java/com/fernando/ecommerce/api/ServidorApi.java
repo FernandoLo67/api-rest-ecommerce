@@ -93,6 +93,14 @@ public class ServidorApi implements AutoCloseable {
     }
 
     private void atender(HttpExchange intercambio) throws IOException {
+        agregarCabecerosCors(intercambio);
+
+        if ("OPTIONS".equalsIgnoreCase(intercambio.getRequestMethod())) {
+            intercambio.sendResponseHeaders(204, -1);
+            intercambio.close();
+            return;
+        }
+
         try {
             Metodo metodo;
             try {
@@ -114,6 +122,14 @@ public class ServidorApi implements AutoCloseable {
         } catch (RuntimeException e) {
             responder(intercambio, Respuesta.error(500, "Error interno: " + e.getMessage()));
         }
+    }
+
+    private void agregarCabecerosCors(HttpExchange intercambio) {
+        intercambio.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        intercambio.getResponseHeaders().add("Access-Control-Allow-Methods",
+                "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+        intercambio.getResponseHeaders().add("Access-Control-Allow-Headers",
+                "Content-Type, Authorization");
     }
 
     static Map<String, String> interpretarConsulta(String crudo) {
