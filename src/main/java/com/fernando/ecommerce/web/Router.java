@@ -5,8 +5,10 @@ import com.fernando.ecommerce.json.Json;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Tabla de rutas. Resuelve una solicitud al manejador correspondiente y
@@ -40,12 +42,12 @@ public class Router {
                 return false;
             }
             Entrada that = (Entrada) o;
-            return java.util.Objects.equals(ruta, that.ruta) && java.util.Objects.equals(manejador, that.manejador);
+            return Objects.equals(ruta, that.ruta) && Objects.equals(manejador, that.manejador);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Objects.hash(ruta, manejador);
+            return Objects.hash(ruta, manejador);
         }
 
         @Override
@@ -106,6 +108,6 @@ public class Router {
 
     public List<String> rutasRegistradas() {
         return entradas.stream().map(e -> e.ruta().toString())
-                .collect(java.util.stream.Collectors.toUnmodifiableList());
+                .collect(Collectors.toUnmodifiableList());
     }
 }
